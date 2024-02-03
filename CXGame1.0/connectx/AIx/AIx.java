@@ -18,7 +18,7 @@ import java.util.ArrayList;
 public class AIx implements CXPlayer {
 	// timeout_in_secs = numero massimo di secondi per una mossa
     private Random rand;
-	private static final int MAX_DEPTH = 7; // Profondità massima dell'albero di ricerca
+	private int MAX_DEPTH; // Profondità massima dell'albero di ricerca
     private int M, N, X;
     private boolean first;
     private int timeout_in_secs;
@@ -42,6 +42,16 @@ public class AIx implements CXPlayer {
         this.timeout_in_secs = timeout_in_secs;
         rand = new Random(System.currentTimeMillis());
 
+        if(M <= 7 && N <= 7){
+            MAX_DEPTH = 7;
+        }
+        else if (M <= 30 && N <= 30){
+            MAX_DEPTH = 3;
+        }
+        else{
+            MAX_DEPTH = 2;
+        }
+
         if (this.first == true){
             AI = CXCellState.P1;
             AInum = 1;
@@ -58,6 +68,7 @@ public class AIx implements CXPlayer {
             AIwin = CXGameState.WINP2;
             HUMANwin = CXGameState.WINP1;
         }
+
 		
 		
 	}
@@ -79,32 +90,124 @@ public class AIx implements CXPlayer {
         int AIpieceCount = (int) Arrays.stream(window).filter(x -> x == AInum).count();
         int HUMANpieceCount = (int) Arrays.stream(window).filter(x -> x == HUMANnum).count();
         int freeCount = (int) Arrays.stream(window).filter(x -> x == 0).count();
+        if (this.X == 4){
+            if(AIpieceCount == this.X){
+                score += 100;
+            }else if(AIpieceCount == this.X - 1 && freeCount == 1){
+                score += 13;
+            }else if(AIpieceCount == this.X - 2 && freeCount == 2){
+                score += 5;
+            }
+            else if(AIpieceCount == this.X - 3 && freeCount == 3){
+                score += 2;
+            }
 
-        if(AIpieceCount == this.X){
-            score += 100;
-        }else if(AIpieceCount == this.X - 1 && freeCount == 1){
-            score += 13;
-        }else if(AIpieceCount == this.X - 2 && freeCount == 2){
-            score += 5;
-        }
-        else if(AIpieceCount == this.X - 3 && freeCount == 3){
-            score += 2;
-        }
 
+            if(HUMANpieceCount == this.X){
+                score -= 100;
+            }
+            else if(HUMANpieceCount == this.X - 1 && freeCount == 1){
+                score -= 10;
+            }
+            else if(HUMANpieceCount == this.X - 2 && freeCount == 2){
+                score -= 4;
+            }
+            else if(HUMANpieceCount == this.X - 3 && freeCount == 3){
+                score -= 1;
+            }
+        }
+        else if (this.X == 5){
+            if(AIpieceCount == this.X){
+                score += 100;
+            }else if(AIpieceCount == this.X - 1 && freeCount == 1){
+                score += 23;
+            }else if(AIpieceCount == this.X - 2 && freeCount == 2){
+                score += 14;
+            }
+            else if(AIpieceCount == this.X - 3 && freeCount == 3){
+                score += 5;
+            }
+            else if(AIpieceCount == this.X - 4 && freeCount == 4){
+                score += 2;
+            }
 
-        if(HUMANpieceCount == this.X){
-            score -= 100;
+            if(HUMANpieceCount == this.X){
+                score -= 100;
+            }
+            else if(HUMANpieceCount == this.X - 1 && freeCount == 1){
+                score -= 20;
+            }
+            else if(HUMANpieceCount == this.X - 2 && freeCount == 2){
+                score -= 10;
+            }
+            else if(HUMANpieceCount == this.X - 3 && freeCount == 3){
+                score -= 4;
+            }
+            else if(HUMANpieceCount == this.X - 4 && freeCount == 4){
+                score -= 1;
+            }
         }
-        else if(HUMANpieceCount == this.X - 1 && freeCount == 1){
-            score -= 10;
-        }
-        else if(HUMANpieceCount == this.X - 2 && freeCount == 2){
-            score -= 4;
-        }
-        else if(HUMANpieceCount == this.X - 3 && freeCount == 3){
-            score -= 1;
-        }
+        else if (this.X == 10){
+            if(AIpieceCount == this.X){
+                score += 100000;
+            }else if(AIpieceCount == this.X - 1 && freeCount == 1){
+                score += 100;
+            }else if(AIpieceCount == this.X - 2 && freeCount == 2){
+                score += 90;
+            }
+            else if(AIpieceCount == this.X - 3 && freeCount == 3){
+                score += 60;
+            }
+            else if(AIpieceCount == this.X - 4 && freeCount == 4){
+                score += 50;
+            }
+            else if(AIpieceCount == this.X - 5 && freeCount == 5){
+                score += 40;
+            }
+            else if(AIpieceCount == this.X - 6 && freeCount == 6){
+                score += 30;
+            }
+            else if(AIpieceCount == this.X - 7 && freeCount == 7){
+                score += 20;
+            }
+            else if(AIpieceCount == this.X - 8 && freeCount == 8){
+                score += 10;
+            }
+            else if(AIpieceCount == this.X - 9 && freeCount == 9){
+                score += 2;
+            }
 
+            if(HUMANpieceCount == this.X){
+                score -= 100000;
+            }
+            else if(HUMANpieceCount == this.X - 1 && freeCount == 1){
+                score -= 98;
+            }
+            else if(HUMANpieceCount == this.X - 2 && freeCount == 2){
+                score -= 88;
+            }
+            else if(HUMANpieceCount == this.X - 3 && freeCount == 3){
+                score -= 59;
+            }
+            else if(HUMANpieceCount == this.X - 4 && freeCount == 4){
+                score -= 48;
+            }
+            else if(HUMANpieceCount == this.X - 5 && freeCount == 5){
+                score -= 37;
+            }
+            else if(HUMANpieceCount == this.X - 6 && freeCount == 6){
+                score -= 29;
+            }
+            else if(HUMANpieceCount == this.X - 7 && freeCount == 7){
+                score -= 19;
+            }
+            else if(HUMANpieceCount == this.X - 8 && freeCount == 8){
+                score -= 9;
+            }
+            else if(HUMANpieceCount == this.X - 9 && freeCount == 9){
+                score -= 2;
+            }
+        }
         return score;
     
     }
