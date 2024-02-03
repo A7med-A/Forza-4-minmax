@@ -78,7 +78,6 @@ public class AIx implements CXPlayer {
         START = System.currentTimeMillis();
 
         return minimax(B, MAX_DEPTH, Integer.MIN_VALUE, Integer.MAX_VALUE, true, START, this.timeout_in_secs).getColumn();
-        
 
 	}
 
