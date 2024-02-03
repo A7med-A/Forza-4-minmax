@@ -16,12 +16,13 @@ import java.util.ArrayList;
 
 
 public class AIx implements CXPlayer {
-	// timeout_in_secs = numero massimo di secondi per una mossa
     private Random rand;
 	private int MAX_DEPTH; // Profondità massima dell'albero di ricerca
     private int M, N, X;
     private boolean first;
     private int timeout_in_secs;
+
+    private long START;
 
     private int AInum;
     private int HUMANnum;
@@ -74,10 +75,9 @@ public class AIx implements CXPlayer {
 	}
 
 	public int selectColumn(CXBoard B) {
-		
-        
+        START = System.currentTimeMillis();
 
-        return minimax(B, MAX_DEPTH, Integer.MIN_VALUE, Integer.MAX_VALUE, true).getColumn();
+        return minimax(B, MAX_DEPTH, Integer.MIN_VALUE, Integer.MAX_VALUE, true, START, this.timeout_in_secs).getColumn();
         
 
 	}
@@ -96,7 +96,7 @@ public class AIx implements CXPlayer {
             }else if(AIpieceCount == this.X - 1 && freeCount == 1){
                 score += 13;
             }else if(AIpieceCount == this.X - 2 && freeCount == 2){
-                score += 5;
+                score += 6;
             }
             else if(AIpieceCount == this.X - 3 && freeCount == 3){
                 score += 2;
@@ -235,7 +235,7 @@ public class AIx implements CXPlayer {
                 centerCount++;
             }
         }
-        score += centerCount * 4;
+        score += centerCount * 3;
 
 
         // horizontal check
@@ -303,9 +303,14 @@ public class AIx implements CXPlayer {
 
 
 
-    private Pair<Integer, Integer> minimax(CXBoard board, int depth, int alpha, int beta, boolean maximizingPlayer) {
+    private Pair<Integer, Integer> minimax(CXBoard board, int depth, int alpha, int beta, boolean maximizingPlayer, long startTime, int timeout) {
         List<Integer> validLocations = Arrays.asList(board.getAvailableColumns());
         boolean isTerminal = board.gameState() != CXGameState.OPEN;
+
+        if ((System.currentTimeMillis() - startTime) / 1000.0 >= timeout * (95.0 / 100.0)) {
+            int randomColumn = validLocations.get(rand.nextInt(validLocations.size()));
+            return new Pair<>(randomColumn, 0);
+        }
 
         if (depth == 0 || isTerminal) {
             if (isTerminal) {
@@ -326,7 +331,7 @@ public class AIx implements CXPlayer {
             int column = validLocations.get(rand.nextInt(validLocations.size()));
             for (int col : validLocations) {
                 board.markColumn(col);
-                Pair<Integer, Integer> newScore = minimax(board, depth - 1, alpha, beta, false);
+                Pair<Integer, Integer> newScore = minimax(board, depth - 1, alpha, beta, false, startTime, timeout);
                 board.unmarkColumn();
                 if (newScore.getValue() > value) {
                     value = newScore.getValue();
@@ -343,7 +348,7 @@ public class AIx implements CXPlayer {
             int column = validLocations.get(rand.nextInt(validLocations.size()));
             for (int col : validLocations) {
                 board.markColumn(col);
-                Pair<Integer, Integer> newScore = minimax(board, depth - 1, alpha, beta, true);
+                Pair<Integer, Integer> newScore = minimax(board, depth - 1, alpha, beta, true, startTime, timeout);
                 board.unmarkColumn();
                 if (newScore.getValue() < value) {
                     value = newScore.getValue();
