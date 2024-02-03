@@ -1,0 +1,59 @@
+Componenti Gruppo:
+
+Ahmed Ayad 0001088743
+Vincenzo Adorno 0001080607
+Lorenzo Ricci 0001044327
+
+
+
+
+Descrizione del problema:
+
+Il problema da affrontare è quello di creare un'intelligenza artificiale (AI) per il gioco "Connect X". 
+Il gioco Connect X è una generalizzazione del noto gioco "Connect Four", dove due giocatori si alternano a inserire dischi in una griglia verticale
+e il primo che allinea X dischi orizzontalmente, verticalmente o diagonalmente vince.
+
+L'AI è implementata utilizzando l'interfaccia fornita (CXPlayer) che è inizializzato con vari parametri,
+tra cui le dimensioni della griglia di gioco (M x N), il numero di dischi da allineare per vincere (X),
+se l'AI è il primo giocatore a muovere, e un timeout.
+
+Il problema computazionale che si deve risolve è come fare una mossa ottimale nel gioco Connect X, dato lo stato corrente del gioco. 
+L'obiettivo è quello di massimizzare le probabilità di vincere, o di evitare di perdere, in base allo stato corrente del gioco.
+
+L'AI utilizza un algoritmo di ricerca ad albero con una profondità massima variabile in base alle dimensioni della griglia di gioco.
+L'AI deve fare una mossa entro un certo timeout, quindi la profondità di ricerca potrebbe essere limitata per garantire che l'AI faccia una mossa in tempo.
+
+
+Scelta progettuale:
+
+Dopo una ricerca e un'analisi delle possibili strategie da adottare, abbiamo deciso di implementare un algoritmo di ricerca ad albero con potatura alfa-beta,
+perché è un algoritmo efficiente per la ricerca di mosse ottimali in giochi a due giocatori come Connect X.
+
+Metodi principali:
+
+metodo evaluateScore:è una funzione di valutazione utilizzata per stimare la quanto è buona una particolare configurazione del gioco per l'AI.
+                     La funzione prende come input un array di interi chiamato window, che rappresenta un sottoinsieme delle celle del gioco, e due interi,
+                     AInum e HUMANnum, che rappresentano le rappresentazioni numeriche dello stato dell'AI e dell'umano nel gioco.
+                     All'interno della funzione, vengono contati il numero di pezzi dell'AI, del giocatore umano e di celle libere all'interno della finestra.
+                     Questi conteggi sono utilizzati per calcolare un punteggio che rappresenta quanto è vantaggiosa la configurazione corrente per l'AI.
+                     Il punteggio viene calcolato in base al numero di pezzi dell'AI e dell'umano nella finestra, e al numero di celle libere.
+
+
+metodo scorePosition:una funzione che calcola un punteggio per la posizione corrente sulla griglia del gioco Connect X.
+                     Questo punteggio viene utilizzato per determinare la mossa ottimale per l'AI.
+
+                     Il metodo controlla ogni possibile sottoinsieme di X celle in fila sulla griglia, in tutte le direzioni (orizzontale, verticale e diagonale).
+                     Per ogni sottoinsieme, il metodo calcola un punteggio utilizzando la funzione `evaluateScore` e lo aggiunge al punteggio totale.
+                     In fine la funzione restituisce il punteggio totale calcolato per la posizione corrente sulla griglia.
+
+metodo minimax:il metodo minimax implementa l'algoritmo Minimax con l'ottimizatione alfa-beta che riduce il numero di nodi che l'algoritmo deve esaminare
+
+
+Costo computazionale:
+
+Il metodo che influisce maggiormente sul costo computazionale è il metodo minimax, che deve esaminare tutti i possibili movimenti e le loro conseguenze.
+Il costo computazionale è esponenziale rispetto alla profondità massima di ricerca, quindi è necessario limitare la profondità di ricerca per garantire che l'AI faccia una mossa entro il timeout.
+il costo computazionele del minimax è O(b^d), dove b è il numero di mosse possibili e d è la profondità di ricerca.
+
+
+
